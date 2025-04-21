@@ -1,8 +1,13 @@
-
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../../firebase/auth";
 import { useAuth } from "../../context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +21,6 @@ const Register = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // Redirect if already logged in
   React.useEffect(() => {
     if (currentUser) {
       navigate("/");
@@ -64,141 +68,99 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-          Create a new account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
-          <Link
-            to="/login"
-            className="font-medium text-purple hover:text-purple-dark"
-          >
-            sign in to your existing account
-          </Link>
-        </p>
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50 to-white">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+            Create your account
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Or{" "}
+            <Link
+              to="/login"
+              className="font-medium text-purple hover:text-purple-dark underline underline-offset-4"
+            >
+              sign in to your existing account
+            </Link>
+          </p>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg
-                    className="h-5 w-5 text-red-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+        <Card>
+          <CardContent className="pt-6">
+            {error && (
+              <Alert variant="destructive" className="mb-6">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full name</Label>
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full"
+                  />
                 </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full"
+                  />
                 </div>
               </div>
-            </div>
-          )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Full name
-              </label>
-              <div className="mt-1">
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple focus:border-purple sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple focus:border-purple sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple focus:border-purple sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Confirm password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple focus:border-purple sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button
+              <Button
                 type="submit"
+                className="w-full"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple hover:bg-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple disabled:opacity-50"
+                variant="default"
               >
                 {loading ? (
-                  <>
+                  <div className="flex items-center justify-center">
                     <svg
                       className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                       xmlns="http://www.w3.org/2000/svg"
@@ -220,14 +182,26 @@ const Register = () => {
                       ></path>
                     </svg>
                     Creating account...
-                  </>
+                  </div>
                 ) : (
                   "Create account"
                 )}
-              </button>
-            </div>
-          </form>
-        </div>
+              </Button>
+            </form>
+          </CardContent>
+          <CardFooter className="flex justify-center border-t p-6">
+            <p className="text-sm text-gray-500">
+              By creating an account, you agree to our{" "}
+              <Link to="#" className="text-purple hover:text-purple-dark underline underline-offset-4">
+                Terms of Service
+              </Link>{" "}
+              and{" "}
+              <Link to="#" className="text-purple hover:text-purple-dark underline underline-offset-4">
+                Privacy Policy
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
